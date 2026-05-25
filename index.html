@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Translator App</title>
+    </head>
+    <body>
+        <h2>Language Translator</h2>
+        <textarea id="inputText" rows="5" cols="40" placeholder="Type here"></textarea>
+        <br><br>
+        <select id="targetLang">
+            <option value="ja">Japanese</option>
+            <option value="en">English</option>
+            <option value="ne">Nepali</option>
+        </select>
+        <button onclick="translateText()">Translate</button>
+        <h3>Result:</h3>
+        <p id="result">ここに結果</p>
+
+        <script>
+            async function translateText() {
+                const text = document.getElementById("inputText").value;
+                if (text == "hello"){
+                    document.getElementById("result").innerText = "こんにちは";
+                }
+                if (text == "thank you"){
+                    document.getElementById("result").innerText = "ありがとうございます";
+                }
+                else{
+                    document.getElementById("result").innerText = "わかりません";
+                }
+                const target = document.getElementById("targetLang").value;
+
+                const response = await fetch("hhttps://libretranslate.de/translate", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        q: text,
+                        source: "auto",
+                        target: target,
+                        format: "text"
+                    }),
+                    headers: { "content-Type": "application/json" }
+                });
+                const data = await response.json();
+                document.getElementById("result").innerText = data.translatedText;
+            }
+        </script>
+    </body>
+</html>
